@@ -111,9 +111,18 @@ async def admin_probe():
     }
 
 
+@app.post("/api/admin/parse-test")
+async def admin_parse_test(request: Request):
+    return await run_parse_request(request)
+
+
 @app.post("/v1/responses")
 async def responses(request: Request):
     require_gateway_auth(request)
+    return await run_parse_request(request)
+
+
+async def run_parse_request(request: Request):
     started = time.time()
     metrics["total_parse_requests"] += 1
     body = await request.json()
@@ -674,7 +683,7 @@ async function runParseTest(){
   $('test-result').textContent = '上传并解析中...';
   const dataUrl = await readAsDataUrl(file);
   const started = Date.now();
-  const result = await json('/v1/responses', {
+  const result = await json('/api/admin/parse-test', {
     method:'POST',
     headers:{'content-type':'application/json'},
     body:JSON.stringify({
