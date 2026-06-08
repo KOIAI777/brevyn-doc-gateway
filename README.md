@@ -48,7 +48,7 @@ open http://localhost:8090/admin
 
 Current port mapping:
 
-- Host port: `8090`
+- Host port: `127.0.0.1:8090`
 - Container port: `8090`
 - Admin URL: `http://localhost:8090/admin`
 - OpenAI-compatible Base URL: `http://localhost:8090/v1`
@@ -70,6 +70,38 @@ Set `GATEWAY_API_KEY` to protect `/v1/models` and `/v1/responses`. If it is empt
 The admin console is intended to be protected by binding the service to localhost or by a reverse proxy / server panel access rule. Do not expose `/admin` directly on a public network without an outer access control layer.
 
 In Docker, editable config is stored at `./data/config.json` by default. The checked-in `config.example.json` is only a template.
+
+## Production Deployment
+
+Production uses the published GHCR image by default:
+
+```bash
+BREVYN_DOC_GATEWAY_IMAGE=ghcr.io/koiai777/brevyn-doc-gateway:latest
+```
+
+The default Docker Compose mapping binds the service to localhost only:
+
+```text
+127.0.0.1:8090 -> container 8090
+```
+
+That keeps `/admin` off the public internet. Let `sub2api` call the gateway from
+the server side, or expose it through a protected reverse proxy only when needed.
+
+After the repository is cloned and `.env` is created on the server, updates can
+be applied with:
+
+```bash
+cd /data/brevyn-doc-gateway
+bash scripts/update-server.sh
+```
+
+The script fetches `origin/main`, performs a fast-forward merge, validates Docker
+Compose, backs up `data/config.json` when present, pins
+`BREVYN_DOC_GATEWAY_IMAGE` to the commit image tag such as
+`ghcr.io/koiai777/brevyn-doc-gateway:sha-xxxxxxx`, restarts the service, and
+waits for `/healthz`. If you intentionally want to build on the server instead
+of pulling GHCR, run `UPDATE_MODE=build bash scripts/update-server.sh`.
 
 ## Request Shape
 

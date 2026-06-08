@@ -1,15 +1,19 @@
 services:
   brevyn-doc-gateway:
+    image: ${BREVYN_DOC_GATEWAY_IMAGE:-ghcr.io/koiai777/brevyn-doc-gateway:latest}
     build: .
     container_name: brevyn-doc-gateway
     restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
     ports:
-      - "8090:8090"
+      - "127.0.0.1:8090:8090"
     environment:
-      PORT: "8090"
+      PORT: ${PORT:-8090}
       CONFIG_PATH: "/app/data/config.json"
       DATA_DIR: "/app/data"
       # Optional shared gateway key. When set, callers must send Authorization: Bearer <key>.
-      GATEWAY_API_KEY: ""
+      GATEWAY_API_KEY: ${GATEWAY_API_KEY:-}
     volumes:
       - ./data:/app/data
