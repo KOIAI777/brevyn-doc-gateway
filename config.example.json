@@ -1,0 +1,87 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8090,
+    "maxRequestBytes": 67108864
+  },
+  "gateway": {
+    "model": "brevyn-doc-parse",
+    "defaultMode": "flash",
+    "cacheEnabled": true,
+    "cacheDir": "./data/cache",
+    "requestTimeoutMs": 180000,
+    "pollIntervalMs": 1500,
+    "pollTimeoutMs": 900000,
+    "maxFailoverAttempts": 3
+  },
+  "mineru": {
+    "defaultBaseUrl": "https://mineru.net",
+    "defaultModel": "vlm",
+    "modes": {
+      "flash": {
+        "label": "快速模式",
+        "endpoint": "/api/v1/agent/parse/file",
+        "resultEndpoint": "/api/v1/agent/parse/result/{task_id}",
+        "requestUrl": "https://mineru.net/api/v1/agent/parse/file",
+        "resultUrlTemplate": "https://mineru.net/api/v1/agent/parse/{task_id}",
+        "model": "pipeline",
+        "tokenRequired": false,
+        "maxFileBytes": 10485760,
+        "maxPages": 20,
+        "options": {
+          "ocr": false,
+          "include_image_base64": false,
+          "formula": true,
+          "table": true,
+          "output_format": "md"
+        }
+      },
+      "precision": {
+        "label": "精细模式",
+        "endpoint": "/api/v4/extract/task",
+        "resultEndpoint": "/api/v4/extract/task/{task_id}",
+        "requestUrl": "https://mineru.net/api/v4/file-urls/batch",
+        "resultUrlTemplate": "https://mineru.net/api/v4/extract-results/batch/{task_id}",
+        "model": "vlm",
+        "tokenRequired": true,
+        "maxFileBytes": 209715200,
+        "maxPages": 200,
+        "options": {
+          "ocr": false,
+          "include_image_base64": true,
+          "formula": true,
+          "table": true,
+          "output_format": "md"
+        }
+      }
+    },
+    "defaultOptions": {
+      "language": "ch",
+      "ocr": false,
+      "include_image_base64": false,
+      "formula": true,
+      "table": true,
+      "output_format": "md"
+    },
+    "accounts": [
+      {
+        "id": "mineru-a",
+        "name": "MinerU Account A",
+        "apiKey": "replace-me",
+        "enabled": false,
+        "mode": "flash",
+        "endpoint": "/api/v1/agent/parse/file",
+        "resultEndpoint": "/api/v1/agent/parse/result/{task_id}",
+        "requestUrl": "https://mineru.net/api/v1/agent/parse/file",
+        "resultUrlTemplate": "https://mineru.net/api/v1/agent/parse/{task_id}",
+        "tokenRequired": false,
+        "maxFileBytes": 10485760,
+        "maxPages": 20,
+        "priority": 10,
+        "maxConcurrency": 1,
+        "submitPerMinute": 45,
+        "cooldownSeconds": 60
+      }
+    ]
+  }
+}

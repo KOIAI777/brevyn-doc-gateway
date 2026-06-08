@@ -1,0 +1,15 @@
+services:
+  brevyn-doc-gateway:
+    build: .
+    container_name: brevyn-doc-gateway
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      PORT: "8090"
+      CONFIG_PATH: "/app/data/config.json"
+      DATA_DIR: "/app/data"
+      # Optional shared gateway key. When set, callers must send Authorization: Bearer <key>.
+      GATEWAY_API_KEY: ""
+    volumes:
+      - ./data:/app/data

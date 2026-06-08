@@ -1,0 +1,15 @@
+{
+  "name": "@brevyn/doc-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenAI-compatible document parsing gateway for Brevyn RAG ingestion.",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.17"
+  },
+  "devDependencies": {}
+}
